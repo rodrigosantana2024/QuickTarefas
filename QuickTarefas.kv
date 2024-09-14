@@ -1,0 +1,105 @@
+GerenciadorDeTelas:
+    TelaTarefas:
+    TelaHistorico:
+    TelaTemporizador:
+
+<TelaTarefas>: # Layout da tela principal
+    name: 'tela_tarefas'
+
+    MDFloatLayout:
+        orientation: 'vertical'
+
+        MDTopAppBar:
+            title: 'Quick Tarefas'
+            size_hint_x: 1
+            height: dp(56)
+            pos_hint: {'top': 1}
+            left_action_items: [["account", app.tela1]]  # Botão de histórico
+            right_action_items: [["timer", app.tela2]]  # Botão de temporizador
+            md_bg_color: [0.3, 0.6, 1, 1]
+
+        MDRectangleFlatIconButton:  # Botão de adicionar tarefa
+            icon: 'plus'
+            text: 'Adicionar Tarefa'
+            text_color: [1, 1, 1, 1]
+            md_bg_color: [0.3, 0.6, 1, 1]
+            icon_color: [1, 1, 1, 1]
+            size_hint_x: 0.5
+            pos_hint: {'center_x': .5, 'center_y': .05}
+            on_release: root.adicionar_tarefa()
+
+        ScrollView:  # Layout com as tarefas, dentro de um ScrollView
+            size_hint: (1, 0.3)  # Ajustar tamanho para não sobrepor os botões
+            pos_hint: {'center_x': 0.5, 'center_y': 0.55}  # Centralizar o bloco de tarefas
+            do_scroll_x: False
+            do_scroll_y: True
+            spacing: dp(5)
+            padding: dp(5)
+
+        GridLayout:
+            id: tarefas_container
+            cols: 1
+            spacing: dp(10)
+            padding: dp(10)
+            size_hint_y: 0.82   # Posição do widget da tarefa
+            height: self.minimum_height
+
+            MDBoxLayout:
+                id: tarefas_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(1)  # Menor espaçamento entre as tarefas
+                padding: dp(1)  # Menor padding nas bordas
+            
+      
+            
+<TelaHistorico>:
+    name: 'tela_historico'
+
+    MDFloatLayout:
+        MDLabel:
+            text: 'Histórico'
+            halign: 'center'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+
+        MDRaisedButton:
+            text: 'Voltar'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.15}
+            on_release: root.manager.current = 'tela_tarefas' # Ir para tela Principal
+
+
+<TelaTemporizador>: # Janela do temporizador
+    name: 'tela_temporizador'
+
+    MostraTemporizador:
+        id: temporizador
+        size_hint: (1, 1)
+        
+        MDLabel:
+            text: temporizador.tempo_string  # Usando o id do widget
+            font_style: 'H1'
+            halign: 'center'
+            size_hint_y: None
+            height: dp(100)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+        MDRaisedButton: # Botão iniciar / reiniciar
+            size_hint_x: None
+            width: dp(200)
+            pos_hint: {'center_x': 0.35, 'center_y': 0.4}
+            on_release: temporizador.click()
+
+        MDRaisedButton:
+            text: 'Zerar'  # Botão para zerar o tempo
+            size_hint_x: None
+            width: dp(200)
+            pos_hint: {'center_x': 0.65, 'center_y': 0.4}
+            on_release: temporizador.zerar()  # Chama o método de zerar
+
+        MDRaisedButton:
+            text: 'Voltar'
+            size_hint_x: None
+            width: dp(200)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.15}
+            on_release: root.manager.current = 'tela_tarefas'
